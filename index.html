@@ -1,10 +1,54 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Website Aku</title>
-  </head>
-  <body>
-    <h1>Halo dari GitHub Pages!</h1>
-    <p>Website ini sedang dibuat 💻</p>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <title>Realtime Air Quality</title>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+  <style>
+    body { font-family: Arial; background: #f4f4f4; }
+    .card {
+      background: white;
+      padding: 20px;
+      margin: 10px;
+      display: inline-block;
+      width: 200px;
+      text-align: center;
+      border-radius: 10px;
+    }
+    .val { font-size: 28px; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+<h2>ESP32 Air Quality (Realtime)</h2>
+
+<div class="card">Suhu<div class="val" id="suhu">-</div>°C</div>
+<div class="card">Kelembaban<div class="val" id="hum">-</div>%</div>
+<div class="card">CO₂<div class="val" id="co2">-</div>ppm</div>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "API_KEY_KAMU",
+    authDomain: "iot-airquality-9f42d.firebaseapp.com",
+    databaseURL: "https://iot-airquality-9f42d-default-rtdb.asia-southeast1.firebasedatabase.app/",
+    projectId: "iot-airquality-9f42d"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  db.ref("ESP32_A").on("value", (snap) => {
+    const d = snap.val();
+    if (!d) return;
+    document.getElementById("suhu").innerText = d.suhu;
+    document.getElementById("hum").innerText = d.kelembaban;
+    document.getElementById("co2").innerText = d.co2;
+  });
+</script>
+
+</body>
 </html>
